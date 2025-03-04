@@ -1,0 +1,36 @@
+name: build
+run-name: build
+on:
+  pull_request:
+    branches:
+      - main
+      - 'release/*'
+      - master
+  push:
+    branches:
+      - main
+      - 'release/*'
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: latest
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Build
+        run: pnpm run build
